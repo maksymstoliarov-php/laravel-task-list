@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Response;
+use App\Models\Task;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,20 +21,32 @@ Route::get('/', function () {
 
 Route::get('/tasks', function () {
     return view('index', [
-        'tasks' => \App\Models\Task::latest()->where('completed', 1)->get(),
+        'tasks' => Task::latest()->where('completed', 1)->get(),
     ]);
 })->name('tasks.index');
 
+Route::view('/tasks/create', 'create')->name('tasks.create');
+
 Route::get('/tasks/{id}', function ($id) {
     return view('show', [
-        'task' => \App\Models\Task::findOrFail($id),
+        'task' => Task::find($id),
     ]);
 })->name('tasks.show');
 
-Route::get('hello-world', function () {
-    return redirect()->route('hello', ['name' => 'World']);
-});
+Route::post('/tasks', function (Request $request) {
+    $data = $request->validate([
+        'title' => 'required|max:255',
+        'description' => 'required',
+        'long_description' => 'nullable',
+        'completed' => 'boolean',
+    ]);
 
-Route::get('hello/{name}', function ($name) {
-    return 'Hello ' . $name;
-})->name('hello');
+    $task = new Task();
+    $task->title = $data['title'];
+    $task->description = $data['description'];
+    $task->long_description = $data['long_description'];
+    $task->completed = $data['completed'] ?? false;
+    $task->save();
+
+    return redirect()->route('tasks.show', $task->id);
+})->name('tasks.store');
