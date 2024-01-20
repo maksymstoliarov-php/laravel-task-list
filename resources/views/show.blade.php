@@ -14,6 +14,11 @@
     <p>
         {{ $task?->long_description }}
     </p>
+    @if($task->completed)
+    <p>
+        Completed
+    </p>
+    @endif
     <p>
         {{ $task->created_at }}
     </p>
