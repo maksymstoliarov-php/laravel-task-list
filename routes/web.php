@@ -48,5 +48,7 @@ Route::post('/tasks', function (Request $request) {
     $task->completed = $data['completed'] ?? false;
     $task->save();
 
-    return redirect()->route('tasks.show', $task->id);
+//    session()->flash('message', 'Task Created!');
+
+    return redirect()->route('tasks.show', $task->id)->with('success', 'Task Created!');
 })->name('tasks.store');
