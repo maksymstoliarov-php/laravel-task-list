@@ -3,6 +3,8 @@
 
 @section('title', "Task view: " . $task->title)
 
+<a href="{{ route('tasks.edit', $task->id) }}">Edit task</a>
+
 @section('content')
 <div>
     <p>
