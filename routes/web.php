@@ -50,12 +50,12 @@ Route::get('/tasks/{task}', function (Task $task) {
 Route::post('/tasks', function (TaskRequest $request) {
     $task = Task::create($request->validated());
 
-    return redirect()->route('tasks.show', $task)->with('success', 'Task Created!');
+    return redirect()->route('tasks.show', ['task' => $task->id])->with('success', 'Task Created!');
 })->name('tasks.store');
 
 //edit
 Route::put('/tasks/{task}', function (Task $task, TaskRequest $request) {
     $task->update($request->validated());
 
-    return redirect()->route('tasks.show', $task)->with('success', 'Task Updated!');
+    return redirect()->route('tasks.show', ['task' => $task->id])->with('success', 'Task Updated!');
 })->name('tasks.update');
