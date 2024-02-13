@@ -1,50 +1,46 @@
 @extends('layouts.app')
 
-
 @section('title', "Task view: " . $task->title)
 
-<a href="{{ route('tasks.edit', ['task' => $task->id]) }}">Edit task</a>
-
 @section('content')
+    <nav class="mb-4">
+        <a href="{{ route('tasks.index') }}" class="link">← Tasks</a>
+    </nav>
     <div>
-        <p>
-            {{ $task->title }}
-        </p>
-        <p>
+        <p class="mb-4 text-slate-700">
             {{ $task->description }}
         </p>
-        <p>
-            {{ $task?->long_description }}
-        </p>
+
+        @if($task->long_description)
+            <p class="mb-4 text-slate-700">
+                {{ $task?->long_description }}
+            </p>
+        @endif
 
         <p>
             @if($task->completed)
-                Completed
+                <span class="form-medium text-green-500">Completed</span>
             @else
-                Not completed
+                <span class="form-medium text-red-500">Not completed</span>
             @endif
         </p>
 
-        <p>
-            {{ $task->created_at }}
-        </p>
-        <p>
-            {{ $task->updated_at }}
-        </p>
+        <p class="mb-4 text-sm text-slate-500">Created {{ $task->created_at->diffForHumans() }} • Updated {{ $task->updated_at->diffForHumans() }}</p>
 
-        <div>
+
+        <div class="flex gap-2">
+            <a href="{{ route('tasks.edit', ['task' => $task->id]) }}" class="btn">Edit task</a>
+
             <form action="{{ route('tasks.toggle-complete', $task) }}" method="POST">
                 @csrf
                 @method('PUT')
-                <input type="submit" value="Toggle complete">
+                <button type="submit" class="btn">Mask as {{ $task->completed ? 'not' : '' }} completed</button>
             </form>
-        </div>
 
-        <div>
             <form action="{{ route('tasks.destroy', $task) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <input type="submit" value="Delete">
+                <button type="submit" class="btn">Delete task</button>
             </form>
         </div>
     </div>
