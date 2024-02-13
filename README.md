@@ -1,6 +1,6 @@
-Task list app
+# Task list app
 
-## Features
+### Features
 - [x] Tasks crud
 - [x] Status toggle
 - [x] Flash messages
